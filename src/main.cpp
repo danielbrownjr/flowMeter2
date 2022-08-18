@@ -1,3 +1,16 @@
+/*
+RedShiftBio Flow Meter
+Initial coding provided by SparkFun Electronics and Sensirion. Coding designed by Jasmine Battikha.
+
+Maintained by Daniel Brown, Embeded Systems Engineer @ RedShiftBio 2022
+
+The RedShiftBio Flow Meter is a sensor that measures the flow of water in from the fraction collector port on the back of the AQS3/Apollo instruments.
+
+Note: This code is designed to work with a MicroMod Teensy board. As such, the standard arduino SdFat library is not used.
+You must use the Teensy SdFat library - if you cloned this repo from github, platform IO should be able to handle the dependencies.
+If you install the SdFat library from the Platform IO repository, you will run into compilation errors.
+*/
+
 #include <Arduino.h>
 #include <SdFat.h>
 #include <Wire.h>
@@ -63,6 +76,14 @@ byte armsUp[8] = {
 char buffer[16];
 
 // Flow sensor setup
+/*
+Flow Sensor Pinout:
+1: SDA (Brown Wire)
+2: SCL (Red Wire)
+3: VDD (Orange Wire)
+4: GND (Yellow Wire)
+5: Analog Out (Not Connected)
+*/
 
 const int ADDRESS = 0x40; // Standard address for Liquid Flow Sensors
 const bool VERBOSE_OUTPUT = true; // set to false for less verbose output
@@ -74,7 +95,6 @@ const char    *FLOW_UNIT[] = {"nl/min", "ul/min", "ml/min", "ul/sec", "ml/h"};
 const uint16_t FLOW_UNIT_CODES[] = {2115, 2116, 2117, 2100, 2133};
 uint16_t scale_factor;
 const char *unit;
-
 
 void setup() {
   int ret;
@@ -213,6 +233,7 @@ void setup() {
   lcd.writeChar(0); // Print the heart character. We have to use writeChar since it's a serial display.
   lcd.print(" SerLCD! ");
   lcd.writeChar(1); // Print smiley
+  delay(1000);
 }
 
 void loop() {
@@ -221,8 +242,6 @@ void loop() {
   
   // Displaying flow on the LCD
   lcd.setCursor(2, 1);
-  sprintf(buffer, "%0.2f uL/min", sensor_reading);
-  lcd.print(buffer);
 
   Wire.requestFrom(ADDRESS, 2); // reading 2 bytes ignores the CRC byte
   if (Wire.available() < 2) {
@@ -237,12 +256,16 @@ void loop() {
     raw_sensor_value |= Wire.read();      // read the LSB from the sensor
     sensor_reading = ((int16_t) raw_sensor_value) / ((float) scale_factor);
 
-    Serial.print("Sensor reading: ");
+/*     Serial.print("Sensor reading: ");
     Serial.print(sensor_reading);
     Serial.print(" ");
-    Serial.println(unit);
+    Serial.println(unit); */
+    sprintf(buffer, "%3.2f uL/min\n", sensor_reading);
+    
+    Serial.print(buffer);
 
   }
+  lcd.print(sensor_reading);
+  lcd.print(buffer);
 
-  delay(250); // milliseconds delay between reads (for demo purposes)
 }
