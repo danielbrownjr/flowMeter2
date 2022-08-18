@@ -154,10 +154,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Display isolated flowrates in real time
+- [ ] Log flow rates for future analysis
+- [ ] Provide moving averages of flowrates and flow imbalances
+    - [ ] Utilize fraction collector port
 
 See the [open issues](https://github.com/danielbrownjr/flowMeter2/issues) for a full list of proposed features (and known issues).
 
@@ -195,7 +195,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Your Name - [@danielbrownjr](https://github.com/danielbrownjr) - dbrown@redshiftbio.com
 
 Project Link: [https://github.com/danielbrownjr/flowMeter2](https://github.com/danielbrownjr/flowMeter2)
 
@@ -216,7 +216,7 @@ Project Link: [https://github.com/danielbrownjr/flowMeter2](https://github.com/d
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/danielbrownjr/repo_name.svg?style=for-the-badge
 [contributors-url]: https://github.com/danielbrownjr/flowMeter2/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
 [forks-url]: https://github.com/danielbrownjr/flowMeter2/network/members
@@ -227,7 +227,7 @@ Project Link: [https://github.com/danielbrownjr/flowMeter2](https://github.com/d
 [license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
 [license-url]: https://github.com/danielbrownjr/flowMeter2/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
+[linkedin-url]: https://www.linkedin.com/in/danielrbrownjr/
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
