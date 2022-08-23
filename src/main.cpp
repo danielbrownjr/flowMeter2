@@ -73,7 +73,7 @@ byte armsUp[8] = {
   0b01010
 };
 
-char buffer[16];
+char buffer[15];
 
 // Flow sensor setup
 /*
@@ -86,6 +86,7 @@ Flow Sensor Pinout:
 */
 
 const int ADDRESS = 0x40; // Standard address for Liquid Flow Sensors
+const int BAUD = 115200;
 const bool VERBOSE_OUTPUT = true; // set to false for less verbose output
 // EEPROM Addresses for factor and unit of calibration fields 0,1,2,3,4.
 const uint16_t SCALE_FACTOR_ADDRESSES[] = {0x2B6, 0x5B6, 0x8B6, 0xBB6, 0xEB6};
@@ -107,7 +108,7 @@ void setup() {
   byte crc1;
   byte crc2;
   
-  Serial.begin(9600);
+  Serial.begin(BAUD);
   Serial.println("Hello World!");
   Wire.begin();
   lcd.begin(Wire);
@@ -260,12 +261,14 @@ void loop() {
     Serial.print(sensor_reading);
     Serial.print(" ");
     Serial.println(unit); */
-    sprintf(buffer, "%3.2f uL/min\n", sensor_reading);
-    
-    Serial.print(buffer);
-
+    for(int i  = 0; i < BAUD; i++) {
+      sprintf(buffer, "%.2f uL/min   \n", sensor_reading);
+      if(i % (19200*8) == 0){ // every 19200 * 8 lines, print to serial
+        Serial.print(buffer);
+      }
+    }
+    lcd.setCursor(0, 1);
+    lcd.print(buffer);
   }
-  lcd.print(sensor_reading);
-  lcd.print(buffer);
 
 }
