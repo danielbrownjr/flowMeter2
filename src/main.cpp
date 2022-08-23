@@ -109,7 +109,7 @@ void setup() {
   byte crc2;
   
   Serial.begin(BAUD);
-  Serial.println("Hello World!");
+  Serial.println("Starting...");
   Wire.begin();
   lcd.begin(Wire);
   
@@ -124,7 +124,7 @@ void setup() {
   lcd.createChar(4, armsUp);
 
   // set the cursor to the top left
-  lcd.setBacklight(0xA020F0); //violet
+  lcd.setBacklight(0xd6082a); //red
   lcd.setCursor(0, 0);
 
     do {
@@ -232,14 +232,22 @@ void setup() {
   // Print a message to the LCD.
   lcd.print("I ");
   lcd.writeChar(0); // Print the heart character. We have to use writeChar since it's a serial display.
-  lcd.print(" SerLCD! ");
+  lcd.print(" RSB! ");
   lcd.writeChar(1); // Print smiley
   delay(1000);
+}
+
+float unit_conversion(float flow_unit){
+  int hour = 60;
+  int micro_to_milli = 1000;
+  float conversion = ((float) flow_unit) * (hour / micro_to_milli);
+  return conversion;
 }
 
 void loop() {
   uint16_t raw_sensor_value;
   float sensor_reading;
+  float flow_output;
   
   // Displaying flow on the LCD
   lcd.setCursor(2, 1);
@@ -256,13 +264,14 @@ void loop() {
     raw_sensor_value  = Wire.read() << 8; // read the MSB from the sensor
     raw_sensor_value |= Wire.read();      // read the LSB from the sensor
     sensor_reading = ((int16_t) raw_sensor_value) / ((float) scale_factor);
+    flow_output = unit_conversion(sensor_reading); //converts from uL/min to mL/hr
 
 /*     Serial.print("Sensor reading: ");
     Serial.print(sensor_reading);
     Serial.print(" ");
     Serial.println(unit); */
     for(int i  = 0; i < BAUD; i++) {
-      sprintf(buffer, "%.2f uL/min   \n", sensor_reading);
+      sprintf(buffer, "%.2f mL/hr   \n", flow_output);
       if(i % (19200*8) == 0){ // every 19200 * 8 lines, print to serial
         Serial.print(buffer);
       }
