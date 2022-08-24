@@ -12,10 +12,18 @@ If you install the SdFat library from the Platform IO repository, you will run i
 */
 
 #include <Arduino.h>
-#include <SdFat.h>
+#include <SD.h>
+#include <SPI.h>
 #include <Wire.h>
 #include <SerLCD.h>
 
+//SD Card Stuff
+File myFile;
+
+#define SD_CS_PIN 5
+const int chipSelect = SD_CS_PIN;
+
+//LCD Stuff
 SerLCD lcd;
 
 byte heart[8] = {
@@ -262,24 +270,46 @@ void loop() {
     lcd.print("Error reading flow");
 
   } else {
-    raw_sensor_value  = Wire.read() << 8; // read the MSB from the sensor
+    /*raw_sensor_value  = Wire.read() << 8; // read the MSB from the sensor
     raw_sensor_value |= Wire.read();      // read the LSB from the sensor
     sensor_reading = ((int16_t) raw_sensor_value) / ((float) scale_factor);
-    flow_output = unit_conversion(sensor_reading); //converts from uL/min to mL/hr
+    flow_output = unit_conversion(sensor_reading); //converts from uL/min to mL/hr */
 
-/*     Serial.print("Sensor reading: ");
+    /*Serial.print("Sensor reading: ");
     Serial.print(sensor_reading);
     Serial.print(" ");
     Serial.println(unit); */
-    for(int i  = 0; i < BAUD; i++) {
-      sprintf(buffer, "%.2f mL/hr   \n", flow_output);
+    if (!SD.begin(chipSelect)) {
+      Serial.println("initialization failed!");
+      return;
+    }
+    //Serial.println("initialization done.");
+    for(int i  = 0; i <= BAUD; i++) {
+      raw_sensor_value  = Wire.read() << 8; // read the MSB from the sensor
+      raw_sensor_value |= Wire.read();      // read the LSB from the sensor
+      sensor_reading = ((int16_t) raw_sensor_value) / ((float) scale_factor);
+      flow_output = unit_conversion(sensor_reading); //converts from uL/min to mL/hr
+      
       sprintf(comma_buffer, "%f,\n", sensor_reading);
+      if(i % (1920 * 8) == 0) {
+        myFile = SD.open("flow.csv", FILE_WRITE);
+        if (myFile) {
+          myFile.print(sensor_reading);
+          myFile.print(",\n");
+          // close the file:
+          myFile.close();
+          //Serial.println("done.");
+        } else {
+          // if the file didn't open, print an error:
+          Serial.println("error opening flow.csv");
+        }
+      }
       if(i % (19200*8) == 0){ // every 19200 * 8 lines, print to serial
         Serial.print(comma_buffer);
       }
     }
+    sprintf(buffer, "%.2f mL/hr   \n", flow_output);
     lcd.setCursor(0, 1);
-    lcd.print(buffer);
+    lcd.print(flow_output);
   }
-
 }
