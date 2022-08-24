@@ -74,6 +74,7 @@ byte armsUp[8] = {
 };
 
 char buffer[15];
+char comma_buffer[15];
 
 // Flow sensor setup
 /*
@@ -272,8 +273,9 @@ void loop() {
     Serial.println(unit); */
     for(int i  = 0; i < BAUD; i++) {
       sprintf(buffer, "%.2f mL/hr   \n", flow_output);
+      sprintf(comma_buffer, "%f,\n", sensor_reading);
       if(i % (19200*8) == 0){ // every 19200 * 8 lines, print to serial
-        Serial.print(buffer);
+        Serial.print(comma_buffer);
       }
     }
     lcd.setCursor(0, 1);

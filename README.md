@@ -195,7 +195,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@danielbrownjr](https://github.com/danielbrownjr) - dbrown@redshiftbio.com
+Daniel Brown - [@danielbrownjr](https://github.com/danielbrownjr) - dbrown@redshiftbio.com
 
 Project Link: [https://github.com/danielbrownjr/flowMeter2](https://github.com/danielbrownjr/flowMeter2)
 
